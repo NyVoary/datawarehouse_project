@@ -170,7 +170,7 @@ def load_table(conn, table_name: str, source: str = "salonkera"):
     rows = [tuple(row) for row in df.itertuples(index=False)]
 
     with conn.cursor() as cur:
-        cur.execute(f"DROP TABLE IF EXISTS {dest_table}")
+        cur.execute(f"DROP TABLE IF EXISTS {dest_table} CASCADE")
         col_defs = ", ".join(f'"{c}" TEXT' for c in cols)
         cur.execute(f"CREATE TABLE {dest_table} ({col_defs})")
         execute_values(cur, f"INSERT INTO {dest_table} VALUES %s", rows)

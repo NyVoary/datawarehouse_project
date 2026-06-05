@@ -71,7 +71,7 @@ def load_to_db(conn, df: pd.DataFrame):
     rows = [tuple(row) for row in df.itertuples(index=False)]
 
     with conn.cursor() as cur:
-        cur.execute("DROP TABLE IF EXISTS staging.raw_meteo")
+        cur.execute("DROP TABLE IF EXISTS staging.raw_meteo CASCADE")
         col_defs = ", ".join(f'"{c}" TEXT' for c in cols)
         cur.execute(f"CREATE TABLE staging.raw_meteo ({col_defs})")
         execute_values(cur, "INSERT INTO staging.raw_meteo VALUES %s", rows)
