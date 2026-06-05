@@ -28,7 +28,11 @@ def fetch_meteo_live(ville: dict) -> dict | None:
         "units": "metric",
         "lang": "fr",
     }
-    resp = requests.get(BASE_URL, params=params, timeout=10)
+    try:
+        resp = requests.get(BASE_URL, params=params, timeout=10)
+    except requests.exceptions.RequestException as e:
+        print(f"[WARN] API météo inaccessible pour {ville['nom']} ({e.__class__.__name__}) → fallback CSV")
+        return None
     if resp.status_code != 200:
         print(f"[WARN] API météo — HTTP {resp.status_code} pour {ville['nom']} → fallback CSV")
         return None
